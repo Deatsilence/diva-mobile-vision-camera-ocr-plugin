@@ -36,13 +36,13 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/aarongrider/vision-camera-ocr",
-  "author": "Aaron Grider <aaron.grider@gmail.com> (https://github.com/aarongrider)",
+  "repository": "https://github.com/francesco-clementi-92/vision-camera-ocr/",
+  "author": "Francesco Clementi <francesco.clementi1992@gmail.com> (https://github.com/francesco-clementi-92)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/aarongrider/vision-camera-ocr/issues"
+    "url": "https://github.com/francesco-clementi-92/vision-camera-ocr/issues"
   },
-  "homepage": "https://github.com/aarongrider/vision-camera-ocr#readme",
+  "homepage": "https://github.com/francesco-clementi-92/vision-camera-ocr#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },

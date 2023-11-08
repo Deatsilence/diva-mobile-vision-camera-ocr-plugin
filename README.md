@@ -4,6 +4,8 @@
 
 # vision-camera-ocr
 
+## This is a fork to allow vision-camera-ocr to work also with react-native-firebase and react-native-vision-camera v3
+
 A [VisionCamera](https://github.com/mrousavy/react-native-vision-camera) Frame Processor Plugin to preform text detection on images using [**MLKit Vision** Text Recognition](https://developers.google.com/ml-kit/vision/text-recognition).
 
 ## Installation
