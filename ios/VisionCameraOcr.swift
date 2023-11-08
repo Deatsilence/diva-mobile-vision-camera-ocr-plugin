@@ -113,7 +113,12 @@ public class OCRFrameProcessorPlugin: NSObject, FrameProcessorPluginBase {
           return nil
         }
 
-        let visionImage = VisionImage(buffer: frame.buffer)
+        let imageBuffer = CMSampleBufferGetImageBuffer(frame.buffer)!
+        let ciimage = CIImage(cvPixelBuffer: imageBuffer)   
+        let context = CIContext(options: nil)
+        let cgImage = context.createCGImage(ciimage, from: ciimage.extent)!
+        let image = UIImage(cgImage: cgImage)
+        let visionImage = VisionImage(image: image)
         
         // TODO: Get camera orientation state
         visionImage.orientation = .up
