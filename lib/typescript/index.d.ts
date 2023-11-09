@@ -1,4 +1,4 @@
-import type { Frame } from 'react-native-vision-camera';
+import { Frame } from 'react-native-vision-camera';
 declare type BoundingFrame = {
     x: number;
     y: number;
@@ -40,5 +40,5 @@ export declare type OCRFrame = {
 /**
  * Scans OCR.
  */
-export declare function scanOCR(frame: Frame): OCRFrame;
+export declare function scanOCR(frame: Frame): (string | number | boolean | undefined) | (string | number | boolean | undefined)[] | Record<string, string | number | boolean | undefined>;
 export {};
