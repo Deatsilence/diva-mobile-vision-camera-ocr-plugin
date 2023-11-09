@@ -17,81 +17,86 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.mrousavy.camera.frameprocessor.FrameProcessorPlugin
 
 class OCRFrameProcessorPluginPlugin(options: Map<String, Any>?): FrameProcessorPlugin(options) {
-  private fun getBlockArray(blocks: MutableList<Text.TextBlock>): WritableNativeArray {
-        val blockArray = WritableNativeArray()
+  private fun getBlockArray(blocks: MutableList<Text.TextBlock>): List<Map<String, Any>> {
+        val resultList = mutableListOf<Map<String, Any>>()
 
         for (block in blocks) {
-            val blockMap = WritableNativeMap()
+            val result = mutableMapOf<String, Any>()
+            result["text"] = block.text
+            result["recognizedLanguages"] = getRecognizedLanguages(block.recognizedLanguage)
+            result["cornerPoints"] = getCornerPoints(block.cornerPoints)
+            result["frame"] = getFrame(block.boundingBox)
+            result["lines"] = getLineArray(block.lines)
 
-            blockMap.putString("text", block.text)
-            blockMap.putArray("recognizedLanguages", getRecognizedLanguages(block.recognizedLanguage))
-            blockMap.putArray("cornerPoints", block.cornerPoints?.let { getCornerPoints(it) })
-            blockMap.putMap("frame", getFrame(block.boundingBox))
-            blockMap.putArray("lines", getLineArray(block.lines))
-
-            blockArray.pushMap(blockMap)
+            resultList.add(result)
         }
-        return blockArray
+        return resultList.toList()
     }
 
-    private fun getLineArray(lines: MutableList<Text.Line>): WritableNativeArray {
-        val lineArray = WritableNativeArray()
+    private fun getLineArray(lines: MutableList<Text.Line>): List<Map<String, Any>> {
+        val lineList = mutableListOf<Map<String, Any>>()
 
         for (line in lines) {
-            val lineMap = WritableNativeMap()
+            val lineMap = mutableMapOf<String, Any>()
 
-            lineMap.putString("text", line.text)
-            lineMap.putArray("recognizedLanguages", getRecognizedLanguages(line.recognizedLanguage))
-            lineMap.putArray("cornerPoints", line.cornerPoints?.let { getCornerPoints(it) })
-            lineMap.putMap("frame", getFrame(line.boundingBox))
-            lineMap.putArray("elements", getElementArray(line.elements))
+            lineMap["text"] = line.text
+            lineMap["recognizedLanguages"] = getRecognizedLanguages(line.recognizedLanguage)
+            lineMap["cornerPoints"] = getCornerPoints(line.cornerPoints)
+            lineMap["frame"] = getFrame(line.boundingBox)
+            lineMap["elements"] = getElementArray(line.elements)
 
-            lineArray.pushMap(lineMap)
+            lineList.add(lineMap)
         }
-        return lineArray
+        return lineList.toList()
     }
 
-    private fun getElementArray(elements: MutableList<Text.Element>): WritableNativeArray {
-        val elementArray = WritableNativeArray()
+    private fun getElementArray(elements: MutableList<Text.Element>): List<Map<String, Any>> {
+        val elementList = mutableListOf<Map<String, Any>>()
 
         for (element in elements) {
-            val elementMap = WritableNativeMap()
+            val elementMapItem = mutableMapOf<String, Any>()
 
-            elementMap.putString("text", element.text)
-            elementMap.putArray("cornerPoints", element.cornerPoints?.let { getCornerPoints(it) })
-            elementMap.putMap("frame", getFrame(element.boundingBox))
+            elementMapItem["text"] = element.text
+            elementMapItem["cornerPoints"] = getCornerPoints(element.cornerPoints)
+            elementMapItem["frame"] = getFrame(element.boundingBox)
+
+            elementList.add(elementMapItem)
         }
-        return elementArray
+        return elementList.toList()
     }
 
-    private fun getRecognizedLanguages(recognizedLanguage: String): WritableNativeArray {
-        val recognizedLanguages = WritableNativeArray()
-        recognizedLanguages.pushString(recognizedLanguage)
+    private fun getRecognizedLanguages(recognizedLanguage: String): List<String> {
+        val recognizedLanguages = mutableListOf<String>()
+        recognizedLanguages.add(recognizedLanguage)
         return recognizedLanguages
     }
 
-    private fun getCornerPoints(points: Array<Point>): WritableNativeArray {
-        val cornerPoints = WritableNativeArray()
+    private fun getCornerPoints(points: Array<out Point>?): Any {
+        val cornerPointsList = mutableListOf<Map<String, Any>>()
+
+        if (points == null) {
+            return cornerPointsList.toList()
+        }
 
         for (point in points) {
-            val pointMap = WritableNativeMap()
-            pointMap.putInt("x", point.x)
-            pointMap.putInt("y", point.y)
-            cornerPoints.pushMap(pointMap)
+            val pointMapItem = mutableMapOf<String, Any>()
+            pointMapItem["x"] = point.x
+            pointMapItem["y"] = point.y
+            cornerPointsList.add(pointMapItem)
         }
-        return cornerPoints
+        return cornerPointsList.toList()
     }
 
-    private fun getFrame(boundingBox: Rect?): WritableNativeMap {
-        val frame = WritableNativeMap()
+    private fun getFrame(boundingBox: Rect?): Map<String, Any> {
+        val frame = mutableMapOf<String, Any>()
 
         if (boundingBox != null) {
-            frame.putDouble("x", boundingBox.exactCenterX().toDouble())
-            frame.putDouble("y", boundingBox.exactCenterY().toDouble())
-            frame.putInt("width", boundingBox.width())
-            frame.putInt("height", boundingBox.height())
-            frame.putInt("boundingCenterX", boundingBox.centerX())
-            frame.putInt("boundingCenterY", boundingBox.centerY())
+            frame["x"] = boundingBox.exactCenterX().toDouble()
+            frame["y"] = boundingBox.exactCenterY().toDouble()
+            frame["width"] = boundingBox.width()
+            frame["height"] = boundingBox.height()
+            frame["boundingCenterX"] = boundingBox.centerX()
+            frame["boundingCenterY"] = boundingBox.centerY()
         }
         return frame
     }
@@ -108,7 +113,7 @@ class OCRFrameProcessorPluginPlugin(options: Map<String, Any>?): FrameProcessorP
 
     override fun callback(frame: Frame, arguments: Map<String, Any>?): Any? {
 
-        val result = WritableNativeMap()
+        val resultList = mutableMapOf<String, Any>()
 
         val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
@@ -120,15 +125,16 @@ class OCRFrameProcessorPluginPlugin(options: Map<String, Any>?): FrameProcessorP
             val task: Task<Text> = recognizer.process(image)
             try {
                 val text: Text = Tasks.await<Text>(task)
-                result.putString("text", text.text)
-                result.putArray("blocks", getBlockArray(text.textBlocks))
+                resultList["text"] = text.text
+                resultList["blocks"] = getBlockArray(text.textBlocks)
             } catch (e: Exception) {
                 return null
             }
         }
 
-        val data = WritableNativeMap()
-        data.putMap("result", result)
-        return data
+        val returnData = mutableMapOf<String, Any>()
+        returnData["result"] = resultList
+
+        return returnData
     }
 }
