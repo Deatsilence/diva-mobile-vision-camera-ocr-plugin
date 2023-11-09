@@ -1,10 +1,10 @@
-import Vision
+import VisionCamera
 import AVFoundation
 import MLKitVision
 import MLKitTextRecognition
 
 @objc(OCRFrameProcessorPlugin)
-public class OCRFrameProcessorPlugin: NSObject, FrameProcessorPluginBase {
+public class OCRFrameProcessorPlugin: NSObject, FrameProcessorPlugin {
     
     private static var textRecognizer = TextRecognizer.textRecognizer()
     
