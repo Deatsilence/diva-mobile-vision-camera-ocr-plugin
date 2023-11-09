@@ -1,5 +1,6 @@
-package com.visioncameraocr
+package com.visioncameraocr.ocrframeprocessorplugin
 
+import com.mrousavy.camera.frameprocessor.Frame
 import android.annotation.SuppressLint
 import android.graphics.Point
 import android.graphics.Rect
@@ -15,9 +16,8 @@ import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.mrousavy.camera.frameprocessor.FrameProcessorPlugin
 
-class OCRFrameProcessorPlugin: FrameProcessorPlugin("scanOCR") {
-
-    private fun getBlockArray(blocks: MutableList<Text.TextBlock>): WritableNativeArray {
+class OCRFrameProcessorPluginPlugin(options: Map<String, Any>?): FrameProcessorPlugin(options) {
+  private fun getBlockArray(blocks: MutableList<Text.TextBlock>): WritableNativeArray {
         val blockArray = WritableNativeArray()
 
         for (block in blocks) {
@@ -96,7 +96,17 @@ class OCRFrameProcessorPlugin: FrameProcessorPlugin("scanOCR") {
         return frame
     }
 
-    override fun callback(frame: ImageProxy, params: Array<Any>): Any? {
+    private fun getDegreesFromOrientationName(orientationName: String): Int {
+        return when (orientationName) {
+            "PORTRAIT" -> 0
+            "LANDSCAPE_RIGHT" -> 90
+            "PORTRAIT_UPSIDE_DOWN" -> 180
+            "LANDSCAPE_LEFT" -> 270
+            else -> 0 // Default to 0 degrees for unrecognized names
+        }
+    }
+
+    override fun callback(frame: Frame, arguments: Map<String, Any>?): Any? {
 
         val result = WritableNativeMap()
 
@@ -106,7 +116,7 @@ class OCRFrameProcessorPlugin: FrameProcessorPlugin("scanOCR") {
         val mediaImage: Image? = frame.getImage()
 
         if (mediaImage != null) {
-            val image = InputImage.fromMediaImage(mediaImage, frame.imageInfo.rotationDegrees)
+            val image = InputImage.fromMediaImage(mediaImage, getDegreesFromOrientationName(frame.getOrientation()))
             val task: Task<Text> = recognizer.process(image)
             try {
                 val text: Text = Tasks.await<Text>(task)
