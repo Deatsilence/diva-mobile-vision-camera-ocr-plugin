@@ -15,6 +15,7 @@ yarn add npm i vision-camera-ocr-plugin
 cd ios && pod install
 ```
 
+TODO: verify if it's needed. Should be replace by worklet now.
 Add the plugin to your `babel.config.js`:
 
 ```js
