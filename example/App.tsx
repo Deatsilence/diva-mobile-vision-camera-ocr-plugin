@@ -7,8 +7,7 @@ import {
   useFrameProcessor,
 } from 'react-native-vision-camera';
 import {Worklets} from 'react-native-worklets-core';
-import {scanOCR} from './../lib/commonjs/index';
-import {OCRFrame} from '../lib/typescript';
+import {OCRFrame, scanOCR} from 'vision-camera-ocr-plugin';
 
 function App(): JSX.Element {
   const {hasPermission, requestPermission} = useCameraPermission();
