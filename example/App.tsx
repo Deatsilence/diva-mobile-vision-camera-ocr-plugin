@@ -69,7 +69,6 @@ function App(): JSX.Element {
       <Camera
         style={[StyleSheet.absoluteFill]}
         frameProcessor={frameProcessor}
-        //style={{height: 600}}
         device={device}
         isActive={true}
         pixelFormat="yuv"
@@ -81,7 +80,6 @@ function App(): JSX.Element {
               ),
           );
         }}
-        //orientation={'portrait'}
       />
       {renderOverlay()}
     </SafeAreaView>
