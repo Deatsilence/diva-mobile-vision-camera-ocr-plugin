@@ -1,5 +1,12 @@
 import React from 'react';
-import {LayoutChangeEvent, PixelRatio, SafeAreaView, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {
+  LayoutChangeEvent,
+  PixelRatio,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import {
   Camera,
   useCameraDevice,

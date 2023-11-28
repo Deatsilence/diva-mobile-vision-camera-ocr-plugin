@@ -4,7 +4,10 @@ import MLKitVision
 import MLKitTextRecognition
 
 @objc(OCRFrameProcessorPlugin)
-public class OCRFrameProcessorPlugin: NSObject, FrameProcessorPlugin {
+public class OCRFrameProcessorPlugin: FrameProcessorPlugin {
+    public override init(options: [AnyHashable : Any]! = [:]) {
+        super.init(options: options)
+    }
     
     private static var textRecognizer = TextRecognizer.textRecognizer()
     
@@ -106,7 +109,7 @@ public class OCRFrameProcessorPlugin: NSObject, FrameProcessorPlugin {
     }
     
     @objc
-    public static func callback(_ frame: Frame!, withArgs _: [Any]!) -> Any! {
+    public override func callback(_ frame: Frame, withArguments arguments: [AnyHashable: Any]?) -> Any! {
         
         guard (CMSampleBufferGetImageBuffer(frame.buffer) != nil) else {
           print("Failed to get image buffer from sample buffer.")
@@ -125,8 +128,7 @@ public class OCRFrameProcessorPlugin: NSObject, FrameProcessorPlugin {
         
         var result: Text
         do {
-          result = try TextRecognizer.textRecognizer()
-            .results(in: visionImage)
+          result = try OCRFrameProcessorPlugin.textRecognizer.results(in: visionImage)
         } catch let error {
           print("Failed to recognize text with error: \(error.localizedDescription).")
           return nil
@@ -135,7 +137,7 @@ public class OCRFrameProcessorPlugin: NSObject, FrameProcessorPlugin {
         return [
             "result": [
                 "text": result.text,
-                "blocks": getBlockArray(result.blocks),
+                "blocks": OCRFrameProcessorPlugin.getBlockArray(result.blocks),
             ]
         ]
     }
