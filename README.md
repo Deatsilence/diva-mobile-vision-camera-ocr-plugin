@@ -8,7 +8,7 @@ A [VisionCamera](https://github.com/mrousavy/react-native-vision-camera) Frame P
 ## Installation
 
 ```sh
-yarn add vision-camera-ocr
+yarn add vision-camera-ocr-plugin
 cd ios && pod install
 ```
 
