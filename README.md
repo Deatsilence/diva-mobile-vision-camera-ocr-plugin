@@ -25,7 +25,7 @@ module.exports = {
 ## Usage
 
 ```js
-import {scanOCR} from 'vision-camera-ocr';
+import {scanOCR} from 'vision-camera-ocr-plugin';
 
 // ...
 const frameProcessor = useFrameProcessor((frame) => {
