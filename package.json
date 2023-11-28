@@ -1,5 +1,5 @@
 {
-  "name": "@ismaelmoreiraa/vision-camera-ocr",
+  "name": "@francesco-clementi-92moreiraa/vision-camera-ocr",
   "version": "2.1.1",
   "private": false,
   "description": "VisionCamera Frame Processor Plugin to provide OCR support",
@@ -39,14 +39,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ismael/vision-camera-ocr.git"
+    "url": "git+https://github.com/francesco-clementi-92/vision-camera-ocr.git"
   },
-  "author": "Ismael Sousa <ismael1998sousa@gmail.com> (https://github.com/ismaelsousa)",
+  "author": "francesco-clementi-92 <francesco-clementi-92@gmail.com> (https://github.com/francesco-clementi-92)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ismaelsousa/vision-camera-ocr/issues"
+    "url": "https://github.com/francesco-clementi-92/vision-camera-ocr/issues"
   },
-  "homepage": "https://github.com/ismaelsousa/vision-camera-ocr#readme",
+  "homepage": "https://github.com/francesco-clementi-92/vision-camera-ocr#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
