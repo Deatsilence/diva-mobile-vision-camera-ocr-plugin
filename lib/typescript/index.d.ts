@@ -1,5 +1,5 @@
 import { Frame } from 'react-native-vision-camera';
-declare type BoundingFrame = {
+type BoundingFrame = {
     x: number;
     y: number;
     width: number;
@@ -7,38 +7,44 @@ declare type BoundingFrame = {
     boundingCenterX: number;
     boundingCenterY: number;
 };
-declare type Point = {
+type BoundingBox = {
+    top: number;
+    right: number;
+    bottom: number;
+    left: number;
+};
+type Point = {
     x: number;
     y: number;
 };
-declare type TextElement = {
+type TextElement = {
     text: string;
-    frame: BoundingFrame;
-    cornerPoints: Point[];
+    frame?: BoundingFrame;
+    boundingBox?: BoundingBox;
+    cornerPoints?: Point[];
 };
-declare type TextLine = {
+type TextLine = {
     text: string;
     elements: TextElement[];
-    frame: BoundingFrame;
+    frame?: BoundingFrame;
+    boundingBox?: BoundingBox;
     recognizedLanguages: string[];
-    cornerPoints: Point[];
+    cornerPoints?: Point[];
 };
-declare type TextBlock = {
+type TextBlock = {
     text: string;
     lines: TextLine[];
-    frame: BoundingFrame;
+    frame?: BoundingFrame;
+    boundingBox?: BoundingBox;
     recognizedLanguages: string[];
-    cornerPoints: Point[];
+    cornerPoints?: Point[];
 };
-declare type Text = {
+type Text = {
     text: string;
     blocks: TextBlock[];
 };
-export declare type OCRFrame = {
+export type OCRFrame = {
     result: Text;
 };
-/**
- * Scans OCR.
- */
-export declare function scanOCR(frame: Frame): (string | number | boolean | undefined) | (string | number | boolean | undefined)[] | Record<string, string | number | boolean | undefined>;
+export declare function scanOCR(frame: Frame): OCRFrame;
 export {};

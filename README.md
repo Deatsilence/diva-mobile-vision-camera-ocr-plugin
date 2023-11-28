@@ -1,33 +1,22 @@
-<div align="right">
-<img align="right" src="docs/demo.gif">
-</div>
 
 # vision-camera-ocr
 
-## This is a fork to allow vision-camera-ocr to work also with react-native-firebase and react-native-vision-camera v3
-
 A [VisionCamera](https://github.com/mrousavy/react-native-vision-camera) Frame Processor Plugin to preform text detection on images using [**MLKit Vision** Text Recognition](https://developers.google.com/ml-kit/vision/text-recognition).
+
+<img style='width:200px;' src="docs/demo.gif">
 
 ## Installation
 
 ```sh
-yarn add npm i vision-camera-ocr-plugin
+yarn add vision-camera-ocr
 cd ios && pod install
 ```
 
-TODO: verify if it's needed. Should be replace by worklet now.
 Add the plugin to your `babel.config.js`:
 
 ```js
 module.exports = {
-  plugins: [
-    [
-      'react-native-reanimated/plugin',
-      {
-        globals: ['__scanOCR'],
-      },
-    ],
-
+   plugins: [['react-native-worklets-core/plugin']],
     // ...
 ```
 
@@ -36,7 +25,7 @@ module.exports = {
 ## Usage
 
 ```js
-import { labelImage } from "vision-camera-image-labeler";
+import {scanOCR} from 'vision-camera-ocr';
 
 // ...
 const frameProcessor = useFrameProcessor((frame) => {
@@ -59,7 +48,7 @@ const frameProcessor = useFrameProcessor((frame) => {
 ```
 
 The text object closely resembles the object documented in the MLKit documents.
-https://developers.google.com/ml-kit/vision/text-recognition#text_structure
+<https://developers.google.com/ml-kit/vision/text-recognition#text_structure>
 
 ```
 The Text Recognizer segments text into blocks, lines, and elements. Roughly speaking:
@@ -70,8 +59,6 @@ a Line is a contiguous set of words on the same axis, and
 
 an Element is a contiguous set of alphanumeric characters ("word") on the same axis in most Latin languages, or a character in others
 ```
-
-
 
 ## Contributing
 

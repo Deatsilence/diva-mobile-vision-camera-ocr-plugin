@@ -1,94 +1,92 @@
 package com.visioncameraocr.ocrframeprocessorplugin
 
-import com.mrousavy.camera.frameprocessor.Frame
 import android.annotation.SuppressLint
 import android.graphics.Point
 import android.graphics.Rect
 import android.media.Image
-import androidx.camera.core.ImageProxy
-import com.facebook.react.bridge.WritableNativeArray
-import com.facebook.react.bridge.WritableNativeMap
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+
+
+import com.mrousavy.camera.frameprocessor.Frame
 import com.mrousavy.camera.frameprocessor.FrameProcessorPlugin
+import com.mrousavy.camera.types.Orientation
 
 class OCRFrameProcessorPluginPlugin(options: Map<String, Any>?): FrameProcessorPlugin(options) {
-  private fun getBlockArray(blocks: MutableList<Text.TextBlock>): List<Map<String, Any>> {
-        val resultList = mutableListOf<Map<String, Any>>()
+    private fun getBlockArray(blocks: MutableList<Text.TextBlock>): List<HashMap<String, Any?>> {
+        val blockArray = mutableListOf<HashMap<String, Any?>>()
 
         for (block in blocks) {
-            val result = mutableMapOf<String, Any>()
-            result["text"] = block.text
-            result["recognizedLanguages"] = getRecognizedLanguages(block.recognizedLanguage)
-            result["cornerPoints"] = getCornerPoints(block.cornerPoints)
-            result["frame"] = getFrame(block.boundingBox)
-            result["lines"] = getLineArray(block.lines)
+            val blockMap = HashMap<String, Any?>()
 
-            resultList.add(result)
+            blockMap["text"] = block.text
+            blockMap["recognizedLanguages"] = getRecognizedLanguages(block.recognizedLanguage)
+            blockMap["cornerPoints"] = block.cornerPoints?.let { getCornerPoints(it) }
+            blockMap["frame"] = block.boundingBox?.let { getFrame(it) }
+            blockMap["boundingBox"] = block.boundingBox?.let { getBoundingBox(it) }
+            blockMap["lines"] = getLineArray(block.lines)
+
+            blockArray.add(blockMap)
         }
-        return resultList.toList()
+        return blockArray
     }
 
-    private fun getLineArray(lines: MutableList<Text.Line>): List<Map<String, Any>> {
-        val lineList = mutableListOf<Map<String, Any>>()
+    private fun getLineArray(lines: MutableList<Text.Line>): List<HashMap<String, Any?>> {
+        val lineArray = mutableListOf<HashMap<String, Any?>>()
 
         for (line in lines) {
-            val lineMap = mutableMapOf<String, Any>()
+            val lineMap = hashMapOf<String, Any?>()
 
             lineMap["text"] = line.text
             lineMap["recognizedLanguages"] = getRecognizedLanguages(line.recognizedLanguage)
-            lineMap["cornerPoints"] = getCornerPoints(line.cornerPoints)
-            lineMap["frame"] = getFrame(line.boundingBox)
+            lineMap["cornerPoints"] = line.cornerPoints?.let { getCornerPoints(it) }
+            lineMap["frame"] = line.boundingBox?.let { getFrame(it)  }
+            lineMap["boundingBox"] = line.boundingBox?.let { getBoundingBox(it) }
             lineMap["elements"] = getElementArray(line.elements)
 
-            lineList.add(lineMap)
+            lineArray.add(lineMap)
         }
-        return lineList.toList()
+        return lineArray
     }
 
-    private fun getElementArray(elements: MutableList<Text.Element>): List<Map<String, Any>> {
-        val elementList = mutableListOf<Map<String, Any>>()
+    private fun getElementArray(elements: MutableList<Text.Element>): List<HashMap<String, Any?>> {
+        val elementArray = mutableListOf<HashMap<String, Any?>>()
 
         for (element in elements) {
-            val elementMapItem = mutableMapOf<String, Any>()
+            val elementMap = hashMapOf<String, Any?>()
 
-            elementMapItem["text"] = element.text
-            elementMapItem["cornerPoints"] = getCornerPoints(element.cornerPoints)
-            elementMapItem["frame"] = getFrame(element.boundingBox)
+            elementMap["text"] = element.text
+            elementMap["cornerPoints"] = element.cornerPoints?.let { getCornerPoints(it) }
+            elementMap["frame"] =  element.boundingBox?.let { getFrame(it)  }
+            elementMap["boundingBox"] = element.boundingBox?.let { getBoundingBox(it) }
+            elementArray.add(elementMap)
 
-            elementList.add(elementMapItem)
         }
-        return elementList.toList()
+        return elementArray
     }
 
     private fun getRecognizedLanguages(recognizedLanguage: String): List<String> {
-        val recognizedLanguages = mutableListOf<String>()
-        recognizedLanguages.add(recognizedLanguage)
-        return recognizedLanguages
+        return  listOf(recognizedLanguage)
     }
 
-    private fun getCornerPoints(points: Array<out Point>?): Any {
-        val cornerPointsList = mutableListOf<Map<String, Any>>()
-
-        if (points == null) {
-            return cornerPointsList.toList()
-        }
+    private fun getCornerPoints(points: Array<Point>): List<HashMap<String, Int>> {
+        val cornerPoints = mutableListOf<HashMap<String, Int>>()
 
         for (point in points) {
-            val pointMapItem = mutableMapOf<String, Any>()
-            pointMapItem["x"] = point.x
-            pointMapItem["y"] = point.y
-            cornerPointsList.add(pointMapItem)
+            val pointMap = hashMapOf<String, Int>()
+            pointMap["x"] = point.x
+            pointMap["y"] = point.y
+            cornerPoints.add(pointMap)
         }
-        return cornerPointsList.toList()
+        return cornerPoints
     }
 
-    private fun getFrame(boundingBox: Rect?): Map<String, Any> {
-        val frame = mutableMapOf<String, Any>()
+    private fun getFrame(boundingBox: Rect?): HashMap<String, Any> {
+        val frame = hashMapOf<String, Any>()
 
         if (boundingBox != null) {
             frame["x"] = boundingBox.exactCenterX().toDouble()
@@ -101,40 +99,40 @@ class OCRFrameProcessorPluginPlugin(options: Map<String, Any>?): FrameProcessorP
         return frame
     }
 
-    private fun getDegreesFromOrientationName(orientationName: String): Int {
-        return when (orientationName) {
-            "PORTRAIT" -> 0
-            "LANDSCAPE_RIGHT" -> 90
-            "PORTRAIT_UPSIDE_DOWN" -> 180
-            "LANDSCAPE_LEFT" -> 270
-            else -> 0 // Default to 0 degrees for unrecognized names
+    private fun getBoundingBox(boundingBox: Rect?): HashMap<String, Any> {
+        val box = hashMapOf<String,Any>()
+
+        if (boundingBox != null) {
+            box["left"] = boundingBox.left
+            box["top"] = boundingBox.top
+            box["right"] = boundingBox.right
+            box["bottom"] = boundingBox.bottom
         }
+
+        return box
     }
 
-    override fun callback(frame: Frame, arguments: Map<String, Any>?): Any? {
-
-        val resultList = mutableMapOf<String, Any>()
+    override fun callback(frame: Frame, params: Map<String, Any>?): Any? {
+        val result = hashMapOf<String, Any>()
 
         val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
         @SuppressLint("UnsafeOptInUsageError")
-        val mediaImage: Image? = frame.getImage()
+        val mediaImage: Image? = frame.image
+        val orientation = Orientation.fromUnionValue(frame.orientation)
 
-        if (mediaImage != null) {
-            val image = InputImage.fromMediaImage(mediaImage, getDegreesFromOrientationName(frame.getOrientation()))
+        if (mediaImage != null && orientation!= null) {
+            val image = InputImage.fromMediaImage(mediaImage, orientation.toDegrees())
             val task: Task<Text> = recognizer.process(image)
             try {
-                val text: Text = Tasks.await<Text>(task)
-                resultList["text"] = text.text
-                resultList["blocks"] = getBlockArray(text.textBlocks)
+                val text: Text = Tasks.await(task)
+                result["text"] = text.text
+                result["blocks"] = getBlockArray(text.textBlocks)
             } catch (e: Exception) {
                 return null
             }
         }
 
-        val returnData = mutableMapOf<String, Any>()
-        returnData["result"] = resultList
-
-        return returnData
+        return hashMapOf("result" to result)
     }
 }
