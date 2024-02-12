@@ -1,6 +1,6 @@
 {
   "name": "diva-mobile-vision-camera-ocr-plugin",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "private": false,
   "description": "VisionCamera Frame Processor Plugin to provide OCR support",
   "main": "lib/commonjs/index",
