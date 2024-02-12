@@ -1,5 +1,5 @@
-/* eslint-disable no-undef */
 import { VisionCameraProxy, Frame } from 'react-native-vision-camera';
+import { parseMRZ } from './util/mrzParser';
 
 type BoundingFrame = {
   x: number;
@@ -66,4 +66,8 @@ export function scanOCR(frame: Frame): OCRFrame {
     );
   }
   return plugin.call(frame) as any;
+}
+
+export function mrzParse(initialLines: string[]) {
+  return parseMRZ(initialLines);
 }

@@ -1,6 +1,6 @@
 {
-  "name": "vision-camera-ocr-plugin",
-  "version": "2.1.9",
+  "name": "diva-mobile-vision-camera-ocr-plugin",
+  "version": "0.0.1",
   "private": false,
   "description": "VisionCamera Frame Processor Plugin to provide OCR support",
   "main": "lib/commonjs/index",
@@ -39,26 +39,25 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/francesco-clementi-92/vision-camera-ocr.git"
+    "url": "git+https://github.com/Deatsilence/diva-mobile-vision-camera-ocr-plugin.git"
   },
-  "author": "francesco-clementi-92 <francesco-clementi-92@gmail.com> (https://github.com/francesco-clementi-92)",
+  "author": "francesco-clementi-92 <francesco-clementi-92@gmail.com> (https://github.com/Deatsilence)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/francesco-clementi-92/vision-camera-ocr/issues"
+    "url": "https://github.com/Deatsilence/diva-mobile-vision-camera-ocr-plugin/issues"
   },
-  "homepage": "https://github.com/francesco-clementi-92/vision-camera-ocr#readme",
+  "homepage": "https://github.com/Deatsilence/diva-mobile-vision-camera-ocr-plugin#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
   "devDependencies": {
     "@react-native-community/eslint-config": "^3.0.0",
-    "@release-it/conventional-changelog": "^2.0.0",
+    "@release-it/conventional-changelog": "^7.0.2",
     "@types/jest": "^26.0.0",
     "@types/react": "^18.2.0",
     "@types/react-native": "0.72.3",
     "commitlint": "^11.0.0",
-    "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
     "husky": "^4.2.5",
@@ -128,5 +127,8 @@
         }
       ]
     ]
+  },
+  "dependencies": {
+    "eslint": "^8.56.0"
   }
 }
