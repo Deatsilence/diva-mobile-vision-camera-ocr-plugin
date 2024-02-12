@@ -1,7 +1,7 @@
 import { VisionCameraProxy, Frame } from 'react-native-vision-camera';
 import { parseMRZ } from './util/mrzParser';
 
-type BoundingFrame = {
+export type BoundingFrame = {
   x: number;
   y: number;
   width: number;
@@ -10,23 +10,23 @@ type BoundingFrame = {
   boundingCenterY: number;
 };
 
-type BoundingBox = {
+export type BoundingBox = {
   top: number;
   right: number;
   bottom: number;
   left: number;
 };
 
-type Point = { x: number; y: number };
+export type Point = { x: number; y: number };
 
-type TextElement = {
+export type TextElement = {
   text: string;
   frame?: BoundingFrame;
   boundingBox?: BoundingBox;
   cornerPoints?: Point[];
 };
 
-type TextLine = {
+export type TextLine = {
   text: string;
   elements: TextElement[];
   frame?: BoundingFrame;
@@ -35,7 +35,7 @@ type TextLine = {
   cornerPoints?: Point[];
 };
 
-type TextBlock = {
+export type TextBlock = {
   text: string;
   lines: TextLine[];
   frame?: BoundingFrame;
@@ -44,7 +44,7 @@ type TextBlock = {
   cornerPoints?: Point[];
 };
 
-type Text = {
+export type Text = {
   text: string;
   blocks: TextBlock[];
 };
