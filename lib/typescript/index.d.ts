@@ -1,5 +1,5 @@
 import { Frame } from 'react-native-vision-camera';
-type BoundingFrame = {
+export type BoundingFrame = {
     x: number;
     y: number;
     width: number;
@@ -7,23 +7,23 @@ type BoundingFrame = {
     boundingCenterX: number;
     boundingCenterY: number;
 };
-type BoundingBox = {
+export type BoundingBox = {
     top: number;
     right: number;
     bottom: number;
     left: number;
 };
-type Point = {
+export type Point = {
     x: number;
     y: number;
 };
-type TextElement = {
+export type TextElement = {
     text: string;
     frame?: BoundingFrame;
     boundingBox?: BoundingBox;
     cornerPoints?: Point[];
 };
-type TextLine = {
+export type TextLine = {
     text: string;
     elements: TextElement[];
     frame?: BoundingFrame;
@@ -31,7 +31,7 @@ type TextLine = {
     recognizedLanguages: string[];
     cornerPoints?: Point[];
 };
-type TextBlock = {
+export type TextBlock = {
     text: string;
     lines: TextLine[];
     frame?: BoundingFrame;
@@ -39,7 +39,7 @@ type TextBlock = {
     recognizedLanguages: string[];
     cornerPoints?: Point[];
 };
-type Text = {
+export type Text = {
     text: string;
     blocks: TextBlock[];
 };
@@ -72,4 +72,3 @@ export declare function mrzParse(initialLines: string[]): {
     docExpirationDate: string | undefined;
     additionalInformation: string;
 } | undefined;
-export {};
